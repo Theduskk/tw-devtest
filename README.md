@@ -3,7 +3,8 @@ Requires Go 1.23.4 (Requires 1.20+); Docker Engine 27.4.0; (Tested on these, may
 # Go Only
 go run main.go
 
-The below is noisy as it queries the public endpoint (TODO Mock it)
+The below is noisy as it queries the public endpoint (TODO Mock HTTP calls)
+
 go test -v ./...
 
 # Docker
