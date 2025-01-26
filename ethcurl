@@ -1,0 +1,16 @@
+#!/bin/bash
+# 0xF2977C1282C3001824b000d1e00cC542d59e0Af6
+curl -X POST 'http://127.0.0.1:1337' -H "Content-Type: application/json" --data \
+'{
+    "jsonrpc": "2.0",
+    "method": "eth_getLogs",
+    "params": [
+        {
+            "fromBlock": null,
+            "toBlock": null,
+            "address": "0xF2977C1282C3001824b000d1e00cC542d59e0Af6",
+            "topics": []
+        }
+    ],
+    "id": 0
+}'
