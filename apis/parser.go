@@ -75,6 +75,9 @@ func GetTransactions(address string) ([]structs.Transaction, error) {
 	if err != nil {
 		return nil, err
 	}
+	if accountDetails.Result == nil || len(accountDetails.Result) == 0 {
+		return nil, fmt.Errorf("no transactions found for address %s", address)
+	}
 	return accountDetails.Result, nil
 }
 
@@ -134,8 +137,11 @@ func getDetailsForAccount(account string) (*structs.EthGetLogsResponse, error) {
 	return &responseWrapper, nil
 }
 
+// Persists through restarts for go
+// Does not persist through restarts for docker
+// Also doesn't have proper error handling as this would most likely be removed for something like redis (For in memory)\
+// or a database
 func writePersistentData() {
-	// write subscribedAddresses to file
 	file, err := os.Create("subscribedAddresses")
 	if err != nil {
 		fmt.Println("Failed to create file", err)
@@ -148,7 +154,6 @@ func writePersistentData() {
 }
 
 func readPersistentData() {
-	// read subscribedAddresses from file
 	file, err := os.Open("subscribedAddresses")
 	if err != nil {
 		fmt.Println("Failed to open file", err)
