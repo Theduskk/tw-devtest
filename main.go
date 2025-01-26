@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	// Gin routers for all endpoints
+	// Runs on default port 3000
 	router := gin.Default()
 	router.POST("/subscribe", apis.HandlerSubscribe)
 	router.POST("/unsubscribe", apis.HandlerUnsubscribe)

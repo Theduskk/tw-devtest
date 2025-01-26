@@ -7,6 +7,7 @@ import (
 	gin "github.com/gin-gonic/gin"
 )
 
+// Handler middlewares to pipe required data from context into smaller functions
 func HandlerGetCurrentBlock(c *gin.Context) {
 	address := extractAddressFromPayload(c)
 	fmt.Printf("address: %s", address)

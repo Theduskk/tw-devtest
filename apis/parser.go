@@ -32,6 +32,7 @@ const jsonRpcVersion string = "2.0"
 
 var subscribedAddresses []string
 
+// Subscribe provided address to memory for future use
 func Subscribe(address string) error {
 	for _, subscribedAddress := range subscribedAddresses {
 		if subscribedAddress == address {
@@ -44,6 +45,7 @@ func Subscribe(address string) error {
 	return nil
 }
 
+// Remove provided address from the list
 func Unsubscribe(address string) error {
 	for i, subscribedAddress := range subscribedAddresses {
 		if subscribedAddress == address {
@@ -55,11 +57,13 @@ func Unsubscribe(address string) error {
 	return gin.Error{Err: fmt.Errorf("address not found"), Type: gin.ErrorTypePublic}
 }
 
+// Returns all the subscribed accounts
 func GetSubscribedAccounts() []string {
 	readPersistentData()
 	return subscribedAddresses
 }
 
+// Get the CurrentBlock from the provided address
 func GetCurrentBlock(address string) (string, error) {
 	accountDetails, err := getDetailsForAccount(address)
 	if err != nil {
@@ -71,6 +75,7 @@ func GetCurrentBlock(address string) (string, error) {
 	return accountDetails.Result[0].BlockNumber, nil
 }
 
+// Get Transactions from the provided address
 func GetTransactions(address string) ([]structs.Transaction, error) {
 	accountDetails, err := getDetailsForAccount(address)
 	if err != nil {
@@ -82,6 +87,7 @@ func GetTransactions(address string) ([]structs.Transaction, error) {
 	return accountDetails.Result, nil
 }
 
+// Parse the list of stored account ids and return their transactions
 func GetAllTransactions() ([]structs.Transaction, error) {
 	var transactions []structs.Transaction
 	err := error(nil)
@@ -96,6 +102,7 @@ func GetAllTransactions() ([]structs.Transaction, error) {
 	return transactions, err
 }
 
+// Does an external call to the predefined endpoint and returns a parsed response
 func getDetailsForAccount(account string) (*structs.EthGetLogsResponse, error) {
 	jsonStr, err := json.Marshal(structs.EthGetLogsRequest{
 		Id:      1,
