@@ -39,6 +39,7 @@ func Subscribe(address string) error {
 		}
 	}
 	subscribedAddresses = append(subscribedAddresses, address)
+	fmt.Printf("Subscribed to address: %s", address)
 	writePersistentData()
 	return nil
 }
@@ -120,6 +121,7 @@ func getDetailsForAccount(account string) (*structs.EthGetLogsResponse, error) {
 	client := &http.Client{}
 
 	resp, err := client.Do(request)
+	fmt.Printf("Sent request to endpoint %s", endpoint)
 	if err != nil || resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("failed to make GET request: %v", err)
 	}
@@ -144,19 +146,20 @@ func getDetailsForAccount(account string) (*structs.EthGetLogsResponse, error) {
 func writePersistentData() {
 	file, err := os.Create("subscribedAddresses")
 	if err != nil {
-		fmt.Println("Failed to create file", err)
+		fmt.Printf("Failed to create file: %v", err)
 		return
 	}
 	defer file.Close()
 	for _, address := range subscribedAddresses {
 		file.WriteString(address + "\n")
 	}
+	fmt.Printf("Wrote %v subscribed addresses to file", len(subscribedAddresses))
 }
 
 func readPersistentData() {
 	file, err := os.Open("subscribedAddresses")
 	if err != nil {
-		fmt.Println("Failed to open file", err)
+		fmt.Printf("Failed to open file: %v", err)
 		return
 	}
 	defer file.Close()
@@ -169,4 +172,5 @@ func readPersistentData() {
 		}
 		subscribedAddresses = append(subscribedAddresses, address)
 	}
+	fmt.Printf("Read %v subscribed addresses from file", len(subscribedAddresses))
 }

@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"fmt"
 	"net/http"
 
 	gin "github.com/gin-gonic/gin"
@@ -8,6 +9,7 @@ import (
 
 func HandlerGetCurrentBlock(c *gin.Context) {
 	address := extractAddressFromPayload(c)
+	fmt.Printf("address: %s", address)
 	if address == "" {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "address not provided"})
 		return
@@ -17,25 +19,30 @@ func HandlerGetCurrentBlock(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.IndentedJSON(http.StatusAccepted, body)
+	fmt.Printf("HandlerGetCurrentBlock: body: %s", body)
+	c.IndentedJSON(http.StatusOK, body)
 }
 
 func HandlerSubscribe(c *gin.Context) {
 	address := extractAddressFromPayload(c)
+	fmt.Printf("address: %s", address)
 	if address == "" {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "address not provided"})
 		return
 	}
+	fmt.Printf("address: %s", address)
 	err := Subscribe(address)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.IndentedJSON(http.StatusAccepted, address)
+	fmt.Printf("address: %s", address)
+	c.IndentedJSON(http.StatusOK, address)
 }
 
 func HandlerUnsubscribe(c *gin.Context) {
 	address := extractAddressFromPayload(c)
+	fmt.Printf("address: %s", address)
 	if address == "" {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "address not provided"})
 		return
@@ -45,11 +52,11 @@ func HandlerUnsubscribe(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.IndentedJSON(http.StatusAccepted, nil)
+	c.IndentedJSON(http.StatusOK, nil)
 }
 
 func HandlerGetSubscribedAccounts(c *gin.Context) {
-	c.IndentedJSON(http.StatusAccepted, gin.H{"accounts": GetSubscribedAccounts()})
+	c.IndentedJSON(http.StatusOK, gin.H{"accounts": GetSubscribedAccounts()})
 }
 
 func HandlerGetTransactions(c *gin.Context) {
@@ -58,12 +65,14 @@ func HandlerGetTransactions(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "address not provided"})
 		return
 	}
+	fmt.Printf("address: %s", address)
 	transactions, err := GetTransactions(address)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.IndentedJSON(http.StatusAccepted, gin.H{"transactions": transactions})
+	fmt.Printf("transactions: %v", transactions)
+	c.IndentedJSON(http.StatusOK, gin.H{"transactions": transactions})
 }
 
 func HandlerGetAllTransactions(c *gin.Context) {
@@ -72,7 +81,8 @@ func HandlerGetAllTransactions(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.IndentedJSON(http.StatusAccepted, gin.H{"transactions": transactions})
+	fmt.Printf("transactions: %v", transactions)
+	c.IndentedJSON(http.StatusOK, gin.H{"transactions": transactions})
 }
 
 func extractAddressFromPayload(c *gin.Context) string {

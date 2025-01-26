@@ -3,6 +3,9 @@ Requires Go 1.23.4 (Requires 1.20+); Docker Engine 27.4.0; (Tested on these, may
 # Go Only
 go run main.go
 
+The below is noisy as it queries the public endpoint (TODO Mock it)
+go test -v ./...
+
 # Docker
 go build; docker build --tag devtask0.1 .; docker run --publish 3000:3000 devtask0.1;
 
